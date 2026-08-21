@@ -156,16 +156,21 @@
     margin-bottom:22px;
     box-shadow:0 14px 30px -20px rgba(20,30,70,0.18);
   }
+  .result-body{ padding:24px 22px; }
+  .result-bullet{
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--ink);
+    margin-bottom:12px;
+  }
   .result-headline{
-    background:linear-gradient(135deg, #EEF1FB, #E4E9F9);
-    padding:20px 22px;
     font-family:'Inter', sans-serif;
     font-weight:800;
     font-size:clamp(16px,2.6vw,19px);
     color:var(--ink);
     letter-spacing:-0.01em;
+    margin-bottom:12px;
   }
-  .result-body{ padding:18px 22px; }
   .result-body p{ color:var(--ink-soft); font-size:14.5px; margin-bottom:14px; }
   .result-body img{ width:100%; height:auto; border-radius:10px; border:1px solid var(--line-cool); display:block; }
   .result-secondary{
@@ -408,8 +413,9 @@
     <p style="color:var(--ink-soft); margin-bottom:32px;">Don't take my word for it. Look at what business owners I've worked with are saying.</p>
 
     <div class="result-card">
-      <div class="result-headline">₦14,000,000 In Sales And Sold Out</div>
       <div class="result-body">
+        <div class="result-bullet"></div>
+        <div class="result-headline">₦14,000,000 In Sales And Sold Out</div>
         <p>Kate generated ₦14,000,000 in sales and completely sold out, with more orders still coming in.</p>
         <video class="real-video" controls playsinline preload="metadata">
           <source src="assets/testimonial-kate.mp4" type="video/mp4">
@@ -420,16 +426,9 @@
     <div class="section-transition">And these aren't the only businesses I've helped.</div>
 
     <div class="result-card">
-      <div class="result-headline">₦4,000 In Ad Spend → Over ₦300,000 In Sales</div>
       <div class="result-body">
-        <p>Eva used the same approach she learned from me and generated over ₦300,000 in sales after spending ₦4,000 on ads for the campaign.</p>
-        <img src="assets/testimonial-eva.jpg" alt="Eva's WhatsApp message about her ₦300,000 in sales from ₦4,000 ad spend">
-      </div>
-    </div>
-
-    <div class="result-card">
-      <div class="result-headline">Yes, You Can Sell Expensive Products Too</div>
-      <div class="result-body">
+        <div class="result-bullet"></div>
+        <div class="result-headline">Yes, You Can Sell Expensive Products Too</div>
         <p>This business owner closed 4 sales for a ₦2,000,000 product using this approach.</p>
         <img src="assets/testimonial-2m.jpg" alt="Client message about 4 sales of a ₦2 million product">
         <div class="result-secondary">Your product doesn't have to be cheap for this to work.</div>
@@ -437,16 +436,27 @@
     </div>
 
     <div class="result-card">
-      <div class="result-headline">1,000+ Leads And Over ₦400,000 In Sales</div>
       <div class="result-body">
+        <div class="result-bullet"></div>
+        <div class="result-headline">₦4,000 In Ad Spend → Over ₦300,000 In Sales</div>
+        <p>Eva used the same approach she learned from me and generated over ₦300,000 in sales after spending ₦4,000 on ads for the campaign.</p>
+        <img src="assets/testimonial-eva.jpg" alt="Eva's WhatsApp message about her ₦300,000 in sales from ₦4,000 ad spend">
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-body">
+        <div class="result-bullet"></div>
+        <div class="result-headline">1,000+ Leads And Over ₦400,000 In Sales</div>
         <p>This wig business generated over 1,000 leads and made over ₦400,000 in instant sales.</p>
         <img src="assets/testimonial-wig.jpg" alt="Client message showing leads and sales estimate over ₦400,000">
       </div>
     </div>
 
     <div class="result-card">
-      <div class="result-headline">7 Sales In 3 Days For A ₦30,000+ Product</div>
       <div class="result-body">
+        <div class="result-bullet"></div>
+        <div class="result-headline">7 Sales In 3 Days For A ₦30,000+ Product</div>
         <p>This business owner selling flower vases priced above ₦30,000 made 7 instant sales in just 3 days.</p>
         <img src="assets/testimonial-vase.jpg" alt="Client message confirming 7 sales">
         <div class="result-secondary">She even got a celebrity to buy her product and give her a free shoutout.</div>
