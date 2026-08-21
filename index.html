@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How To Sell On Snapchat: Build A Real Business, Not Just Run Ads</title>
 <meta name="description" content="Learn how to use Snapchat to find customers, run ads, and build a business that keeps bringing you buyers.">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1389338596469852');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
@@ -595,6 +613,9 @@
   var CHECKOUT_LINK = "#"; // TODO: replace with the real Snapchat Ads checkout/payment link
   document.querySelectorAll('[data-cta]').forEach(function(btn){
     btn.href = CHECKOUT_LINK;
+    btn.addEventListener('click', function(){
+      if(typeof fbq === 'function'){ fbq('track', 'InitiateCheckout'); }
+    });
   });
 
   // Real 6h countdown under the curriculum, persisted per visitor so it doesn't fake-reset on refresh.

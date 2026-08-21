@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're In! - Snapchat Ads System</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1389338596469852');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:#F6F7FB;
+    color:#0F1222;
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .card{ max-width:480px; text-align:center; }
+  .check{
+    width:64px; height:64px;
+    border-radius:50%;
+    background:rgba(59,91,255,0.12);
+    border:1.5px solid #3B5BFF;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 24px;
+    font-size:28px;
+    color:#3B5BFF;
+  }
+  .spinner{
+    width:40px; height:40px;
+    border:3px solid #E7E9F2;
+    border-top-color:#3B5BFF;
+    border-radius:50%;
+    margin:0 auto 20px;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  h1{ font-size:clamp(24px,5vw,32px); margin-bottom:14px; font-weight:800; }
+  p{ color:#565B70; font-size:15.5px; line-height:1.6; margin-bottom:10px; }
+  .next-steps{
+    text-align:left;
+    background:#fff;
+    border:1px solid #E7E9F2;
+    border-radius:10px;
+    padding:20px 22px;
+    margin-top:24px;
+    font-size:14.5px;
+    color:#333649;
+  }
+  .next-steps li{ margin-bottom:8px; margin-left:18px; }
+  .whatsapp-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    background:#25D366;
+    color:#0A0A10;
+    font-weight:700;
+    font-size:15px;
+    padding:15px 24px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-top:22px;
+    width:100%;
+  }
+  #checkingCard, #successCard, #noRefCard{ display:none; }
+</style>
+</head>
+<body>
+
+  <div class="card" id="checkingCard">
+    <div class="spinner"></div>
+    <p>Confirming your payment, one moment...</p>
+  </div>
+
+  <div class="card" id="successCard">
+    <div class="check">✓</div>
+    <h1>You're in.</h1>
+    <p>Payment received, welcome to the Snapchat Business System.</p>
+    <p>Check your email (and spam folder) for your access details. If it hasn't arrived in 15 minutes, message me directly.</p>
+    <ul class="next-steps">
+      <li>Check your inbox for the login/access link</li>
+      <li>Reply here if you'd like to book your free 1-on-1 call (only if you signed up within 24 hours)</li>
+      <li>Start going through the material today</li>
+    </ul>
+    <a class="whatsapp-btn" id="waBtn" href="#" target="_blank" rel="noopener">💬 Confirm your payment on WhatsApp</a>
+  </div>
+
+  <div class="card" id="noRefCard">
+    <h1>Didn't complete a payment?</h1>
+    <p>This page is only meant to be seen right after a successful payment, and we couldn't confirm one for this visit.</p>
+    <p>If you did pay and landed here by mistake, message me directly on WhatsApp with your name and email and I'll sort it out.</p>
+    <a class="whatsapp-btn" id="waBtn2" href="#" target="_blank" rel="noopener">💬 Message me on WhatsApp</a>
+  </div>
+
+  <script>
+    var message = "Hi Josh, I just made payment for the Snapchat Ads System. Here are my details:\nName: \nEmail: ";
+    var waLink = "https://wa.me/2349160013685?text=" + encodeURIComponent(message);
+    document.getElementById('waBtn').href = waLink;
+    document.getElementById('waBtn2').href = waLink;
+
+    function show(id){
+      ['checkingCard','successCard','noRefCard'].forEach(function(x){
+        document.getElementById(x).style.display = (x === id) ? 'block' : 'none';
+      });
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var reference = params.get('reference') || params.get('trxref');
+
+    if(!reference){
+      show('noRefCard');
+    } else {
+      show('checkingCard');
+      fetch('/api/verify-payment?reference=' + encodeURIComponent(reference))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(data.verified){
+            show('successCard');
+            if(typeof fbq === 'function'){
+              fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
+            }
+          } else {
+            show('noRefCard');
+          }
+        })
+        .catch(function(){
+          show('noRefCard');
+        });
+    }
+  </script>
+
+</body>
+</html>
