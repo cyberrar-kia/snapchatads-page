@@ -282,6 +282,14 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     border-radius:8px;
     margin-top:16px;
   }
+  .free-tag .hours-left{
+    color:#7A0E0E;
+    font-weight:900;
+    animation:blink-red 1s step-start infinite;
+  }
+  @keyframes blink-red{
+    50%{ opacity:0.25; }
+  }
 
   /* ---------- Curriculum list ---------- */
   .learn-list{ list-style:none; margin-top:8px; }
@@ -563,8 +571,8 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
         <div class="content">
           <h3>A FREE 1-on-1 Call With Me</h3>
           <p>You will get an exclusive 1-on-1 call with me where I will show you exactly how to script your video ad for your specific business, so you know exactly what to say and how to present your product.</p>
-          <div class="free-tag">FREE FOR THE NEXT 24 HOURS</div>
-          <p style="margin-top:10px;">This 1-on-1 call is completely free for everyone who signs up within the next 24 hours.</p>
+          <div class="free-tag">FREE FOR THE NEXT <span class="hours-left" id="freeCallHours">06</span> HOURS</div>
+          <p style="margin-top:10px;">This 1-on-1 call is completely free for everyone who signs up before the price timer above runs out.</p>
         </div>
       </li>
     </ul>
@@ -616,7 +624,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     <div class="cta-row" style="margin-top:22px;">
       <a class="cta-btn" href="#" data-cta>Yes, I Want To Build My Business On Snapchat →</a>
     </div>
-    <div class="urgency-line">Remember: the FREE 1-on-1 call is available to people who sign up within the next 24 hours.</div>
+    <div class="urgency-line">Remember: the FREE 1-on-1 call is only available before the price timer runs out.</div>
   </div>
 </section>
 
@@ -657,6 +665,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       deadline = Date.now() + DURATION_MS;
     }
     const clockEl = document.getElementById('curriculumClock');
+    const hoursLeftEl = document.getElementById('freeCallHours');
     function tick(){
       let remaining = deadline - Date.now();
       if(remaining <= 0){
@@ -668,6 +677,11 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       const m = Math.floor((remaining % 3600000) / 60000);
       const s = Math.floor((remaining % 60000) / 1000);
       clockEl.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      if(hoursLeftEl){
+        // Round up so it reads "06" for the whole final hour, then drops to "05", etc.
+        const hoursLeftRounded = Math.max(1, Math.ceil(remaining / 3600000));
+        hoursLeftEl.textContent = String(hoursLeftRounded).padStart(2,'0');
+      }
     }
     tick();
     setInterval(tick, 1000);
