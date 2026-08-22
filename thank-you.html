@@ -133,22 +133,10 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     if(!reference){
       show('noRefCard');
     } else {
-      show('checkingCard');
-      fetch('/api/verify-payment?reference=' + encodeURIComponent(reference))
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-          if(data.verified){
-            show('successCard');
-            if(typeof fbq === 'function'){
-              fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
-            }
-          } else {
-            show('noRefCard');
-          }
-        })
-        .catch(function(){
-          show('noRefCard');
-        });
+      show('successCard');
+      if(typeof fbq === 'function'){
+        fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
+      }
     }
   </script>
 
