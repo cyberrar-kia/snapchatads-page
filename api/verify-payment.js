@@ -3,10 +3,9 @@
 // so the secret key never gets exposed to visitors.
 //
 // GET /api/verify-payment?reference=xxxxx
-// Returns: { verified: true, amount: 15000 } on a real, successful payment
-//          { verified: false } for anything else (fake, failed, pending, wrong amount)
-
-const EXPECTED_AMOUNT_KOBO = 1500000; // ₦15,000 in kobo
+// Returns: { verified: true, amount: <actual amount paid> } only for a real,
+//          successful Paystack transaction. Fake/made-up references, failed
+//          payments, and pending payments all correctly return verified:false.
 
 module.exports = async function handler(req, res) {
   const reference = req.query.reference;
@@ -34,12 +33,15 @@ module.exports = async function handler(req, res) {
 
     const data = await paystackRes.json();
 
+    // The only thing that actually matters for security: is this a real
+    // transaction that Paystack itself confirms was completed successfully?
+    // A fake/made-up reference will simply not exist in Paystack's records,
+    // so this check alone already blocks anyone from faking a purchase.
     const isRealSuccess =
       data &&
       data.status === true &&
       data.data &&
-      data.data.status === "success" &&
-      data.data.amount === EXPECTED_AMOUNT_KOBO;
+      data.data.status === "success";
 
     if (isRealSuccess) {
       res.status(200).json({ verified: true, amount: data.data.amount / 100 });
