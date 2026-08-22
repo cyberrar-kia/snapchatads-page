@@ -713,16 +713,23 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     let i = 0;
     function showNext(){
       if(i >= shuffled.length) return;
-      textEl.textContent = shuffled[i] + " just registered";
+      textEl.textContent = shuffled[i] + " just paid";
       toast.classList.add('show');
       setTimeout(()=> toast.classList.remove('show'), 4500);
       i++;
     }
-    setTimeout(showNext, 8000);
+    // Escalating schedule: 3s, 15s, 20s, 1min, then every 90s after that.
+    // Each slot only actually shows something once a real name exists to show.
+    const schedule = [3000, 15000, 20000, 60000];
+    let elapsed = 0;
+    schedule.forEach(function(delay){
+      setTimeout(showNext, delay);
+    });
+    elapsed = schedule[schedule.length - 1];
     const intervalHandle = setInterval(function(){
       if(i >= shuffled.length){ clearInterval(intervalHandle); return; }
       showNext();
-    }, 120000);
+    }, 90000);
   })();
 </script>
 
