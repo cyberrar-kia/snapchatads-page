@@ -141,6 +141,19 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     cursor:pointer;
   }
   .hero-dots .dot.active{ background:var(--blue); }
+  .unmute-btn{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    background:rgba(0,0,0,0.65);
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.3);
+    border-radius:999px;
+    font-size:11px;
+    font-family:'JetBrains Mono', monospace;
+    padding:6px 12px;
+    cursor:pointer;
+  }
 
   /* ---------- Personal letter ---------- */
   .letter-section{ background:var(--bg); }
@@ -437,16 +450,17 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     <h1>I Helped This Struggling Instagram Business Owner Do <span class="money">₦14,000,000</span> In Sales In The Last Quarter Of 2025... And We're Doing It Again This Last Quarter Of 2026.</h1>
     <div class="hero-proof" id="heroProof">
       <div class="hero-slides" id="heroSlides">
+        <div class="hero-slide" style="position:relative;">
+          <video id="heroSlideVideo" autoplay muted loop playsinline preload="auto" poster="assets/testimonial-kate-hero-proof.jpg">
+            <source src="assets/testimonial-kate.mp4" type="video/mp4">
+          </video>
+          <button id="unmuteBtn" class="unmute-btn">🔇 Tap for sound</button>
+        </div>
         <div class="hero-slide">
           <img src="assets/testimonial-kate-hero-proof.jpg" alt="Kate's message about hitting ₦14 million in sales">
         </div>
-        <div class="hero-slide">
-          <video id="heroSlideVideo" controls playsinline preload="metadata" poster="assets/testimonial-kate-hero-proof.jpg">
-            <source src="assets/testimonial-kate.mp4" type="video/mp4">
-          </video>
-        </div>
       </div>
-      <div class="cap">Kate, the moment she hit ₦14,000,000 in sales — swipe right for the video →</div>
+      <div class="cap">Kate, the moment she hit ₦14,000,000 in sales — swipe left for the screenshot →</div>
       <div class="hero-dots">
         <span class="dot active" data-slide="0"></span>
         <span class="dot" data-slide="1"></span>
@@ -766,11 +780,14 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
   // Hero image/video slider. The video has no autoplay attribute at all,
   // so it only ever plays if the visitor taps the play button themselves,
-  // never automatically, never with sound on page load.
+  // Hero video/image slider. Video autoplays muted so it can actually grab
+  // attention on load (browsers block unmuted autoplay entirely), a visible
+  // unmute button lets anyone turn the sound on themselves.
   (function(){
     const slidesEl = document.getElementById('heroSlides');
     const dots = document.querySelectorAll('#heroProof .dot');
     const video = document.getElementById('heroSlideVideo');
+    const unmuteBtn = document.getElementById('unmuteBtn');
     if(!slidesEl) return;
     let current = 0;
 
@@ -778,9 +795,18 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       current = Math.max(0, Math.min(1, index));
       slidesEl.style.transform = 'translateX(-' + (current * 100) + '%)';
       dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
-      // If swiping away from the video slide, pause it so it doesn't keep
-      // playing silently off-screen.
-      if(current !== 1 && video && !video.paused){ video.pause(); }
+      if(video){
+        if(current === 0){ video.play().catch(function(){}); }
+        else{ video.pause(); }
+      }
+    }
+
+    if(unmuteBtn && video){
+      unmuteBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        video.muted = !video.muted;
+        unmuteBtn.textContent = video.muted ? '🔇 Tap for sound' : '🔊 Sound on';
+      });
     }
 
     dots.forEach(function(dot){
@@ -797,8 +823,8 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       const endX = e.changedTouches[0].clientX;
       const delta = endX - startX;
       if(Math.abs(delta) < 40) return; // ignore tiny accidental swipes
-      if(delta > 0){ goTo(current + 1); } // swiped right, reveal video
-      else{ goTo(current - 1); } // swiped left, back to image
+      if(delta < 0){ goTo(current + 1); } // swiped left, reveal screenshot
+      else{ goTo(current - 1); } // swiped right, back to video
     }, { passive: true });
   })();
 </script>
