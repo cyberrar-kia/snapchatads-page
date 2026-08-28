@@ -781,6 +781,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       // A real swipe just happened, that's genuine user interaction,
       // so unmuting here is allowed and expected, not blocked by browsers.
       if(video){
+        video.currentTime = 0; // restart, it's been silently playing since page load
         video.muted = false;
         video.play().catch(function(){});
       }
