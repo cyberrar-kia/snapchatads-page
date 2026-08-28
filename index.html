@@ -778,11 +778,20 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     function goToVideo(){
       onVideo = true;
       track.classList.add('at-video');
+      // A real swipe just happened, that's genuine user interaction,
+      // so unmuting here is allowed and expected, not blocked by browsers.
+      if(video){
+        video.muted = false;
+        video.play().catch(function(){});
+      }
     }
     function goToImage(){
       onVideo = false;
       track.classList.remove('at-video');
-      if(video && !video.paused){ video.pause(); }
+      if(video){
+        video.pause();
+        video.muted = true;
+      }
     }
 
     track.addEventListener('touchstart', function(e){
