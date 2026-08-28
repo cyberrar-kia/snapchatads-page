@@ -111,7 +111,14 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     border:1px solid var(--line-cool);
     box-shadow:0 16px 34px -20px rgba(20,30,70,0.25);
   }
+  .hero-slides{
+    display:flex;
+    transition:transform .3s ease;
+    touch-action:pan-y;
+  }
+  .hero-slide{ flex:0 0 100%; min-width:100%; background:#000; }
   .hero-proof img{ width:100%; height:auto; display:block; }
+  .hero-proof video{ width:100%; height:auto; display:block; }
   .hero-proof .cap{
     background:var(--card);
     padding:10px 14px;
@@ -120,6 +127,20 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     color:var(--ink-soft);
     text-align:center;
   }
+  .hero-dots{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    padding:8px 0;
+    background:var(--card);
+  }
+  .hero-dots .dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--line-cool);
+    cursor:pointer;
+  }
+  .hero-dots .dot.active{ background:var(--blue); }
 
   /* ---------- Personal letter ---------- */
   .letter-section{ background:var(--bg); }
@@ -414,9 +435,22 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="eyebrow">The Snapchat Business System</div>
     <h1>I Helped This Struggling Instagram Business Owner Do <span class="money">₦14,000,000</span> In Sales In The Last Quarter Of 2025... And We're Doing It Again This Last Quarter Of 2026.</h1>
-    <div class="hero-proof">
-      <img src="assets/testimonial-kate-hero-proof.jpg" alt="Kate's message about hitting ₦14 million in sales">
-      <div class="cap">Kate, the moment she hit ₦14,000,000 in sales</div>
+    <div class="hero-proof" id="heroProof">
+      <div class="hero-slides" id="heroSlides">
+        <div class="hero-slide">
+          <img src="assets/testimonial-kate-hero-proof.jpg" alt="Kate's message about hitting ₦14 million in sales">
+        </div>
+        <div class="hero-slide">
+          <video id="heroSlideVideo" controls playsinline preload="metadata" poster="assets/testimonial-kate-hero-proof.jpg">
+            <source src="assets/testimonial-kate.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="cap">Kate, the moment she hit ₦14,000,000 in sales — swipe right for the video →</div>
+      <div class="hero-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+      </div>
     </div>
     <p>I'll show you exactly what I changed, how switching from just Instagram played a role, and how you can use the same approach to grow your own business.</p>
     <div class="cta-row">
@@ -728,6 +762,44 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       if(i >= shuffled.length){ clearInterval(intervalHandle); return; }
       showNext();
     }, 90000);
+  })();
+
+  // Hero image/video slider. The video has no autoplay attribute at all,
+  // so it only ever plays if the visitor taps the play button themselves,
+  // never automatically, never with sound on page load.
+  (function(){
+    const slidesEl = document.getElementById('heroSlides');
+    const dots = document.querySelectorAll('#heroProof .dot');
+    const video = document.getElementById('heroSlideVideo');
+    if(!slidesEl) return;
+    let current = 0;
+
+    function goTo(index){
+      current = Math.max(0, Math.min(1, index));
+      slidesEl.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
+      // If swiping away from the video slide, pause it so it doesn't keep
+      // playing silently off-screen.
+      if(current !== 1 && video && !video.paused){ video.pause(); }
+    }
+
+    dots.forEach(function(dot){
+      dot.addEventListener('click', function(){
+        goTo(parseInt(dot.dataset.slide, 10));
+      });
+    });
+
+    let startX = 0;
+    slidesEl.addEventListener('touchstart', function(e){
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    slidesEl.addEventListener('touchend', function(e){
+      const endX = e.changedTouches[0].clientX;
+      const delta = endX - startX;
+      if(Math.abs(delta) < 40) return; // ignore tiny accidental swipes
+      if(delta > 0){ goTo(current + 1); } // swiped right, reveal video
+      else{ goTo(current - 1); } // swiped left, back to image
+    }, { passive: true });
   })();
 </script>
 
