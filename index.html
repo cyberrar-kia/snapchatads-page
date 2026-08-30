@@ -87,6 +87,13 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     transition:transform .15s ease, box-shadow .15s ease;
   }
   .cta-btn:hover{ background:var(--blue-deep); transform:translateY(-1px); }
+  .cta-btn-stacked{ flex-direction:column; gap:2px; padding:14px 28px; }
+  .cta-btn-stacked .cta-main{ font-size:16px; font-weight:700; }
+  .cta-btn-stacked .cta-price{ font-size:12px; font-weight:600; opacity:0.85; font-family:'JetBrains Mono', monospace; }
+  @media (max-width:480px){
+    .cta-btn-stacked .cta-main{ font-size:15px; }
+    .cta-btn-stacked .cta-price{ font-size:11px; }
+  }
   .cta-row{ text-align:center; }
   .cta-sub{ font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--ink-soft); margin-top:12px; }
 
@@ -453,7 +460,10 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     </div>
     <p>I'll show you exactly what I changed, how switching from just Instagram played a role, and how you can use the same approach to grow your own business.</p>
     <div class="cta-row">
-      <a class="cta-btn" href="#" data-cta>Show Me How — ₦15,000 →</a>
+      <a class="cta-btn cta-btn-stacked" href="#" data-cta>
+        <span class="cta-main">Show Me How →</span>
+        <span class="cta-price">for ₦15,000</span>
+      </a>
     </div>
   </div>
 </header>
