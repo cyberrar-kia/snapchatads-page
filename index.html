@@ -175,14 +175,16 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     box-shadow:0 24px 48px -28px rgba(80,60,20,0.18);
   }
   .letter-label{
-    font-family:'Inter', sans-serif;
-    font-size:clamp(19px,2.6vw,23px);
-    font-weight:800;
-    letter-spacing:-0.01em;
-    line-height:1.3;
-    color:var(--ink);
-    margin-bottom:22px;
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:clamp(16px,2vw,19px);
+    letter-spacing:0;
+    line-height:1.5;
+    color:var(--ink-soft);
+    margin-bottom:18px;
   }
+  .letter-label .accent{ color:var(--blue); font-weight:600; }
   .letter-card h2{
     font-family:'Fraunces', serif;
     font-weight:600;
@@ -194,9 +196,36 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
   @media (max-width:600px){
     .letter-card{ padding:30px 22px; border-radius:16px; }
   }
+  .inline-proof{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    margin:20px 0;
+  }
+  .inline-proof .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .inline-proof img{ width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; }
+  .inline-proof .cap{ font-size:13px; color:var(--ink-soft); margin-top:10px; font-style:italic; }
 
   /* ---------- Testimonials ---------- */
   .testimonial-section{ background:var(--bg-testimonial); }
+  .proof-headline{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-style:italic;
+    letter-spacing:0;
+    line-height:1.35;
+    font-size:clamp(22px,3.4vw,28px);
+    color:var(--ink);
+  }
   .video-card{
     background:var(--card);
     border:1px solid var(--line-cool);
@@ -232,33 +261,41 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     border:1px solid var(--line-cool);
     border-radius:16px;
     overflow:hidden;
-    margin-bottom:22px;
-    box-shadow:0 14px 30px -20px rgba(20,30,70,0.18);
+    margin-bottom:20px;
+    box-shadow:0 12px 26px -20px rgba(20,30,70,0.16);
   }
-  .result-body{ padding:24px 22px; }
-  .result-bullet{
-    width:10px; height:10px;
-    border-radius:50%;
-    background:var(--ink);
+  .result-body{ padding:22px; }
+  .result-tag{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--blue);
+    background:var(--bg-testimonial);
+    padding:4px 10px;
+    border-radius:999px;
     margin-bottom:12px;
   }
   .result-headline{
     font-family:'Inter', sans-serif;
     font-weight:800;
-    font-size:clamp(16px,2.6vw,19px);
+    font-size:clamp(16px,2.6vw,18.5px);
     color:var(--ink);
     letter-spacing:-0.01em;
-    margin-bottom:12px;
+    line-height:1.3;
+    margin-bottom:10px;
   }
-  .result-body p{ color:var(--ink-soft); font-size:14.5px; margin-bottom:14px; }
-  .result-body img{ width:100%; height:auto; border-radius:10px; border:1px solid var(--line-cool); display:block; }
+  .result-body p{ color:var(--ink-soft); font-size:14px; line-height:1.6; margin-bottom:16px; }
+  .result-body img{ width:100%; height:auto; border-radius:10px; border:1px solid var(--line-cool); display:block; margin-bottom:4px; }
   .result-secondary{
     margin-top:14px;
     padding-top:14px;
     border-top:1px solid var(--line-cool);
-    font-size:14px;
+    font-size:13.5px;
     color:var(--ink);
     font-weight:600;
+    line-height:1.5;
   }
   .section-transition{
     text-align:center;
@@ -444,7 +481,15 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
   /* ---------- CTA sections ---------- */
   .cta-section{ background:var(--bg-hero); text-align:center; }
-  .cta-section h2{ font-size:clamp(24px,4vw,30px); margin-bottom:14px; }
+  .cta-section h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-style:italic;
+    letter-spacing:0;
+    line-height:1.3;
+    font-size:clamp(24px,4vw,32px);
+    margin-bottom:14px;
+  }
   .cta-section p{ color:var(--ink-soft); margin-bottom:10px; max-width:56ch; margin-left:auto; margin-right:auto; }
   .urgency-line{ font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--gold); font-weight:700; margin-top:18px; }
 
@@ -478,7 +523,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     </div>
     <p>I'll show you exactly what I changed in her business. I'll show you how running her ads on a different, less saturated platform outside Instagram played a major role. And I'll personally hold your hand and guide you to achieve the same for your business this last quarter.</p>
     <div class="cta-row">
-      <a class="cta-btn" href="#" data-cta>Get Instant Access</a>
+      <a class="cta-btn" href="#" data-cta>Get Access →</a>
       <div class="cta-price-below">Only ₦15,000</div>
     </div>
   </div>
@@ -488,7 +533,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 <section class="letter-section">
   <div class="wrap">
     <div class="letter-card">
-      <div class="letter-label">You Can't Keep Struggling With Instagram When Others Are Bagging Sales With Snapchat Ads</div>
+      <div class="letter-label">You Can't Keep Struggling With Instagram When Others Are Bagging Sales With <span class="accent">Snapchat Ads</span></div>
       <h2>Dear Business Owner,</h2>
 
       <p>Take a good look at your business. Are you really happy with where it is right now?</p>
@@ -529,6 +574,12 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
       <p>This one approach, if done right, can get you sold out faster than chasing individual customers one by one.</p>
 
+      <div class="inline-proof">
+        <div class="tag">Real Result</div>
+        <img src="assets/testimonial-bulk-hair.jpg" alt="Client sold 1,000 pieces of hair, 300 orders in one day, over ₦10,000,000 in sales">
+        <div class="cap">This business owner sold 1,000 pieces of hair and got over 300 orders in a single day, over ₦10,000,000 in sales, using this exact approach.</div>
+      </div>
+
       <p>And I'll show you exactly how to do it.</p>
 
       <p>I want to hold your hands for the next 14 days and help you exactly the same way I helped Kate and other successful business owners.</p>
@@ -539,11 +590,16 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
       <p>1. Scroll down and go through the testimonials from other business owners that I have personally helped and see what they have to say.</p>
 
-      <p>2. Click the sign up button and complete your registration of ₦15,000, you'll be directed straight to my personal WhatsApp chat.</p>
+      <p>2. Click the Get Access button, complete your ₦15,000 registration, and you'll be directed straight to my personal WhatsApp chat.</p>
 
       <p>This is where I'll personally get to know your business, understand what you're trying to achieve, and guide you through exactly how we're going to use Snapchat to reach more customers and sell your product massively this last quarter.</p>
 
       <p>I will see you on WhatsApp.</p>
+
+      <div class="cta-row" style="margin-top:28px;">
+        <a class="cta-btn" href="#" data-cta>Get Access →</a>
+        <div class="cta-price-below">Only ₦15,000</div>
+      </div>
     </div>
   </div>
 </section>
@@ -552,11 +608,11 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 <section class="testimonial-section">
   <div class="wrap">
     <div class="eyebrow">Proof</div>
-    <h2 style="margin-bottom:32px;">I Also Want To Show You The Exact Results Business Owners Who Were Once Struggling With Sales Got After Working With My System</h2>
+    <h2 class="proof-headline" style="margin-bottom:32px;">I Also Want To Show You The Exact Results Business Owners Who Were Once Struggling With Sales Got After Working With My System</h2>
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">Yes, You Can Sell Expensive Products Too</div>
         <p>This business owner closed 4 sales for a ₦2,000,000 product using this approach.</p>
         <img src="assets/testimonial-2m.jpg" alt="Client message about 4 sales of a ₦2 million product">
@@ -566,7 +622,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">₦14,000,000 In Sales And Sold Out</div>
         <p>Kate generated ₦14,000,000 in sales and completely sold out, with more orders still coming in.</p>
         <video class="real-video" controls playsinline preload="metadata">
@@ -579,7 +635,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">₦4,000 In Ad Spend → Over ₦300,000 In Sales</div>
         <p>Eva used the same approach she learned from me and generated over ₦300,000 in sales after spending ₦4,000 on ads for the campaign.</p>
         <img src="assets/testimonial-eva.jpg" alt="Eva's WhatsApp message about her ₦300,000 in sales from ₦4,000 ad spend">
@@ -588,7 +644,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">1,000+ Leads And Over ₦400,000 In Sales</div>
         <p>This wig business generated over 1,000 leads and made over ₦400,000 in instant sales.</p>
         <img src="assets/testimonial-wig.jpg" alt="Client message showing leads and sales estimate over ₦400,000">
@@ -597,7 +653,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">7 Sales In 3 Days For A ₦30,000+ Product</div>
         <p>This business owner selling flower vases priced above ₦30,000 made 7 instant sales in just 3 days.</p>
         <img src="assets/testimonial-vase.jpg" alt="Client message confirming 7 sales">
@@ -607,7 +663,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 
     <div class="result-card">
       <div class="result-body">
-        <div class="result-bullet"></div>
+        <div class="result-tag">Real Result</div>
         <div class="result-headline">She Sold Out And Begged Me To Pause Her Ads</div>
         <p>This student runs a body enhancement business. A week before this, she sold out her entire stock and started begging me to pause her ads because the messages were too much to handle.</p>
         <img src="assets/testimonial-bodyenhancement.jpg" alt="Client messages asking to pause her ads because demand was too high">
@@ -622,9 +678,10 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 <!-- ===================== 4. CTA ===================== -->
 <section class="cta-section">
   <div class="wrap">
-    <p style="font-weight:800; font-size:clamp(19px,3vw,24px); color:var(--ink); line-height:1.35; max-width:44ch; margin:0 auto 28px;">I want your business to be the next big success I post on my page, but that can only happen if you take the next step to secure the growth of your business.</p>
+    <p style="font-family:'Fraunces', serif; font-weight:500; font-style:italic; font-size:clamp(19px,3vw,24px); color:var(--ink); line-height:1.45; max-width:44ch; margin:0 auto 28px;">I want your business to be the next big success I post on my page, but that can only happen if you take the next step to secure the growth of your business.</p>
     <div class="cta-row">
-      <a class="cta-btn" href="#" data-cta>Yes, Show Me The System — For ₦15,000 →</a>
+      <a class="cta-btn" href="#" data-cta>Get Access →</a>
+      <div class="cta-price-below">Only ₦15,000</div>
     </div>
   </div>
 </section>
@@ -696,7 +753,8 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     </div>
 
     <div class="cta-row" style="margin-top:24px;">
-      <a class="cta-btn" href="#" data-cta>Yes, Show Me The System — For ₦15,000 →</a>
+      <a class="cta-btn" href="#" data-cta>Get Access →</a>
+      <div class="cta-price-below">Only ₦15,000</div>
     </div>
   </div>
 </section>
@@ -724,7 +782,8 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     <p>If you're tired of low sales, tired of old stock piling up, and you're ready to make this last quarter count...</p>
     <p>Click the button below and let's get to work.</p>
     <div class="cta-row" style="margin-top:22px;">
-      <a class="cta-btn" href="#" data-cta>Yes, I Want To Build My Business On Snapchat →</a>
+      <a class="cta-btn" href="#" data-cta>Get Access →</a>
+      <div class="cta-price-below">Only ₦15,000</div>
     </div>
     <div class="urgency-line">Remember: the FREE 1-on-1 call is only available before the price timer runs out.</div>
   </div>
@@ -872,3 +931,4 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
 </body>
 </html>
 <!-- redeploy trigger 1787917186 -->
+<!-- deploy trigger -->
