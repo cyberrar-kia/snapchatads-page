@@ -723,7 +723,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
         <div class="content">
           <h3>A FREE 1-on-1 Call With Me</h3>
           <p>You will get an exclusive 1-on-1 call with me where I will show you exactly how to script your video ad for your specific business, so you know exactly what to say and how to present your product.</p>
-          <div class="free-tag">FREE FOR THE NEXT <span class="hours-left" id="freeCallHours">06</span> HOURS</div>
+          <div class="free-tag">FREE FOR THE NEXT <span class="hours-left" id="freeCallHours">06</span> <span id="freeCallUnit">HOURS</span></div>
           <p style="margin-top:10px;">This 1-on-1 call is completely free for everyone who signs up before the price timer above runs out.</p>
         </div>
       </li>
@@ -735,7 +735,7 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
         <div class="amt">₦65,000</div>
       </div>
       <div class="value-row final">
-        <div class="label">Your price for the next <span id="valueHoursLabel">06</span> hours</div>
+        <div class="label">Your price for the next <span id="valueHoursLabel">06</span> <span id="valueHoursUnit">hours</span></div>
         <div class="amt"><span class="value-strike">₦65,000</span>₦15,000</div>
       </div>
     </div>
@@ -828,6 +828,8 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     const clockEl = document.getElementById('curriculumClock');
     const hoursLeftEl = document.getElementById('freeCallHours');
     const valueHoursEl = document.getElementById('valueHoursLabel');
+    const freeCallUnitEl = document.getElementById('freeCallUnit');
+    const valueUnitEl = document.getElementById('valueHoursUnit');
 
     function tick(){
       let remaining = deadline - Date.now();
@@ -840,8 +842,20 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       const m = Math.floor((remaining % 3600000) / 60000);
       const s = Math.floor((remaining % 60000) / 1000);
       clockEl.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-      if(hoursLeftEl) hoursLeftEl.textContent = String(h).padStart(2,'0');
-      if(valueHoursEl) valueHoursEl.textContent = String(h);
+
+      // Once under an hour remains, switch the "X hours" labels to show
+      // minutes instead, so it never displays a confusing "0 hours".
+      if(h > 0){
+        if(hoursLeftEl) hoursLeftEl.textContent = String(h).padStart(2,'0');
+        if(valueHoursEl) valueHoursEl.textContent = String(h);
+        if(freeCallUnitEl) freeCallUnitEl.textContent = 'HOURS';
+        if(valueUnitEl) valueUnitEl.textContent = 'hours';
+      } else {
+        if(hoursLeftEl) hoursLeftEl.textContent = String(m).padStart(2,'0');
+        if(valueHoursEl) valueHoursEl.textContent = String(m);
+        if(freeCallUnitEl) freeCallUnitEl.textContent = 'MINUTES';
+        if(valueUnitEl) valueUnitEl.textContent = 'minutes';
+      }
     }
     tick();
     setInterval(tick, 1000);
