@@ -397,6 +397,10 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
   }
   .inline-timer .lbl{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); font-weight:700; margin-bottom:8px; }
   .inline-timer .clock{ font-family:'JetBrains Mono', monospace; font-size:26px; font-weight:800; color:var(--ink); }
+  .price-state{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  .price-line{ display:flex; align-items:center; justify-content:center; gap:8px; font-weight:700; font-size:15px; }
+  .price-line .check{ color:#16A34A; font-weight:900; }
+  .price-line.hidden{ display:none; }
 
   /* ---------- Sign-up toast ---------- */
   .signup-toast{
@@ -675,14 +679,21 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
         <div class="amt">₦58,000</div>
       </div>
       <div class="value-row final">
-        <div class="label">Your price for the next 24 hours</div>
+        <div class="label">Your price for the next <span id="valueHoursLabel">06</span> hours</div>
         <div class="amt"><span class="value-strike">₦58,000</span>₦15,000</div>
       </div>
     </div>
 
     <div class="inline-timer">
-      <div class="lbl">This price ends in</div>
       <div class="clock" id="curriculumClock">06:00:00</div>
+      <div class="price-state">
+        <div class="price-line" id="priceStateActive">
+          <span class="check">✓</span> ₦15,000 (with one-on-one call)
+        </div>
+        <div class="price-line hidden" id="priceStateExpired">
+          <span class="check">✓</span> ₦65,000 (without one-on-one call)
+        </div>
+      </div>
     </div>
 
     <div class="cta-row" style="margin-top:24px;">
@@ -740,12 +751,16 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
   });
 
   // Real 6h countdown under the curriculum, persisted per visitor so it doesn't fake-reset on refresh.
-  // Only rolls into a new cycle once a real 6h period has genuinely elapsed.
+  // Once it genuinely expires, it STAYS expired for that visitor, the price actually
+  // changes at that point, so this can't loop forever the way a pure urgency clock could.
   (function(){
     const KEY = 'snapchatOfferDeadline';
+    const EXPIRED_KEY = 'snapchatOfferExpired';
     const DURATION_MS = 6 * 60 * 60 * 1000;
     let deadline;
+    let alreadyExpired = false;
     try{
+      alreadyExpired = localStorage.getItem(EXPIRED_KEY) === 'true';
       const stored = localStorage.getItem(KEY);
       if(stored){
         deadline = parseInt(stored, 10);
@@ -758,24 +773,37 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
     }
     const clockEl = document.getElementById('curriculumClock');
     const hoursLeftEl = document.getElementById('freeCallHours');
+    const valueHoursEl = document.getElementById('valueHoursLabel');
+    const activeState = document.getElementById('priceStateActive');
+    const expiredState = document.getElementById('priceStateExpired');
+
+    function showExpired(){
+      alreadyExpired = true;
+      try{ localStorage.setItem(EXPIRED_KEY, 'true'); } catch(e){}
+      clockEl.textContent = '00:00:00';
+      if(hoursLeftEl) hoursLeftEl.textContent = '00';
+      if(valueHoursEl) valueHoursEl.textContent = '0';
+      if(activeState) activeState.classList.add('hidden');
+      if(expiredState) expiredState.classList.remove('hidden');
+    }
+
     function tick(){
-      let remaining = deadline - Date.now();
+      if(alreadyExpired){ return; } // real expiry already happened, stop counting entirely
+      const remaining = deadline - Date.now();
       if(remaining <= 0){
-        deadline = Date.now() + DURATION_MS;
-        try{ localStorage.setItem(KEY, deadline); } catch(e){}
-        remaining = deadline - Date.now();
+        showExpired();
+        return;
       }
       const h = Math.floor(remaining / 3600000);
       const m = Math.floor((remaining % 3600000) / 60000);
       const s = Math.floor((remaining % 60000) / 1000);
       clockEl.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-      if(hoursLeftEl){
-        // Same hour digit as the main clock above, so they always match exactly.
-        hoursLeftEl.textContent = String(h).padStart(2,'0');
-      }
+      if(hoursLeftEl) hoursLeftEl.textContent = String(h).padStart(2,'0');
+      if(valueHoursEl) valueHoursEl.textContent = String(h);
     }
-    tick();
-    setInterval(tick, 1000);
+
+    if(alreadyExpired){ showExpired(); }
+    else{ tick(); setInterval(tick, 1000); }
   })();
 
   // Sign-up popup. Real Snapchat Ads buyers/businesses only, add more as they pay.
