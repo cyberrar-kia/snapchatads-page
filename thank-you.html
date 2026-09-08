@@ -134,7 +134,21 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       show('noRefCard');
     } else {
       show('successCard');
-      if(typeof fbq === 'function'){
+      // Only fire Purchase once per reference, so refreshing or revisiting
+      // this exact link on this device doesn't quietly duplicate the event.
+      var FIRED_KEY = 'firedPurchaseRefs';
+      var alreadyFired = false;
+      try{
+        var fired = JSON.parse(localStorage.getItem(FIRED_KEY) || '[]');
+        alreadyFired = fired.indexOf(reference) !== -1;
+        if(!alreadyFired){
+          fired.push(reference);
+          localStorage.setItem(FIRED_KEY, JSON.stringify(fired));
+        }
+      } catch(e){
+        // If storage is unavailable, fall through and fire normally rather than block a real purchase.
+      }
+      if(!alreadyFired && typeof fbq === 'function'){
         fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
       }
     }
