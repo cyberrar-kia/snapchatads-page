@@ -148,8 +148,42 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
       } catch(e){
         // If storage is unavailable, fall through and fire normally rather than block a real purchase.
       }
+
       if(!alreadyFired && typeof fbq === 'function'){
-        fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
+        // Manual Advanced Matching: try to get the real buyer's email/phone
+        // from Paystack (using the reference already in this URL) so the
+        // Purchase event carries real identifying data, not just cookies.
+        // Purely additive — if this lookup fails or times out, Purchase
+        // still fires normally exactly as before, nothing is blocked.
+        var firePurchase = function(userData){
+          if(userData && (userData.em || userData.ph)){
+            fbq('init', '1389338596469852', userData);
+          }
+          fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
+        };
+
+        var lookupTimedOut = false;
+        var timeoutId = setTimeout(function(){
+          lookupTimedOut = true;
+          firePurchase(null);
+        }, 2500); // don't make a real buyer wait long for this
+
+        fetch('/api/get-purchaser-info?reference=' + encodeURIComponent(reference))
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if(lookupTimedOut) return; // already fired via timeout
+            clearTimeout(timeoutId);
+            if(data && data.found){
+              firePurchase({ em: data.email || undefined, ph: data.phone || undefined });
+            } else {
+              firePurchase(null);
+            }
+          })
+          .catch(function(){
+            if(lookupTimedOut) return;
+            clearTimeout(timeoutId);
+            firePurchase(null);
+          });
       }
     }
   </script>
