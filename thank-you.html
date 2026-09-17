@@ -159,7 +159,10 @@ src="https://www.facebook.com/tr?id=1389338596469852&ev=PageView&noscript=1"
           if(userData && (userData.em || userData.ph)){
             fbq('init', '1389338596469852', userData);
           }
-          fbq('track', 'Purchase', {value: 15000, currency: 'NGN'});
+          // Same event_id the server-side Paystack webhook uses for this
+          // same reference — lets Meta merge the two into one Purchase
+          // if both happen to fire, instead of double-counting.
+          fbq('track', 'Purchase', {value: 15000, currency: 'NGN'}, {eventID: 'purchase_' + reference});
         };
 
         var lookupTimedOut = false;
