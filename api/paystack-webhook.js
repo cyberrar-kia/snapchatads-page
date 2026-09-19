@@ -8,8 +8,19 @@
 // Uses the SAME event_id as the client-side Pixel call (purchase_<reference>)
 // so Meta's deduplication merges the two into exactly one Purchase if both
 // happen to fire, instead of double-counting a single real sale.
+//
+// This same handler also grants the buyer their portal access for the
+// Snapchat Ads course — see grantPortalAccess() below. That call goes to
+// thefoundingcohort.com, a completely separate product/backend, so it's
+// wrapped in its own try/catch and never allowed to affect the Meta
+// reporting above it or the 200 response Paystack expects back.
 
 const crypto = require("crypto");
+
+// The Snapchat Ads course's row id in the founding-cohort portal's
+// `courses` table — fixed, not something this repo can look up itself.
+const SNAPCHAT_COURSE_ID = "79820a3e-3a74-44db-b834-0abc9c485a7d";
+const GRANT_ACCESS_URL = "https://thefoundingcohort.com/api/internal/grant-course-access";
 
 function hash(value) {
   return crypto.createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
@@ -19,6 +30,50 @@ function normalizePhone(phone) {
   let digits = String(phone).replace(/\D/g, "");
   if (digits.startsWith("0")) digits = "234" + digits.slice(1);
   return digits;
+}
+
+// Creates (or reuses) the buyer's portal account, enrolls them in ONLY
+// the Snapchat Ads course, and sends them the regular "here's your
+// email + password" access email — all handled on the founding-cohort
+// side by the exact same logic real course purchases there already use,
+// so behavior (account matching, welcome email wording, idempotency on
+// the Paystack reference) stays identical across both products.
+async function grantPortalAccess(reference, email, firstName, lastName, amountKobo) {
+  const secret = process.env.INTERNAL_ACCESS_SECRET;
+  if (!secret) {
+    console.error("[webhook][access] INTERNAL_ACCESS_SECRET not set — skipping access grant");
+    return;
+  }
+  if (!email) {
+    console.error("[webhook][access] No customer email on", reference, "— skipping access grant");
+    return;
+  }
+
+  try {
+    const res = await fetch(GRANT_ACCESS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-secret": secret,
+      },
+      body: JSON.stringify({
+        course_id: SNAPCHAT_COURSE_ID,
+        reference,
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        amount_kobo: amountKobo,
+      }),
+    });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok || result.granted === false) {
+      console.error("[webhook][access] Grant failed for", reference, ":", result);
+    } else {
+      console.log("[webhook][access] Portal access granted for", email, reference);
+    }
+  } catch (err) {
+    console.error("[webhook][access] Network error granting access for", reference, err);
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -64,6 +119,8 @@ module.exports = async function handler(req, res) {
   const reference = data.reference;
   const amountKobo = data.amount;
   const email = data.customer && data.customer.email;
+  const firstName = (data.customer && data.customer.first_name) || "";
+  const lastName = (data.customer && data.customer.last_name) || "";
   const phone =
     (data.customer && data.customer.phone) ||
     (data.metadata && data.metadata.phone) ||
@@ -73,6 +130,11 @@ module.exports = async function handler(req, res) {
     res.status(200).send("Missing reference, ignored");
     return;
   }
+
+  // Grant portal access first — this is the actual product the buyer
+  // paid for. Meta reporting below is analytics on top of that, not a
+  // reason to hold up or risk the access grant.
+  await grantPortalAccess(reference, email, firstName, lastName, amountKobo);
 
   if (!metaToken) {
     console.error("[webhook] META_CAPI_ACCESS_TOKEN not set yet — payment confirmed but not reported to Meta");
