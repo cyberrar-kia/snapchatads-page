@@ -155,7 +155,7 @@ module.exports = async function handler(req, res) {
         action_source: "website",
         user_data: userData,
         custom_data: {
-          value: amountKobo ? amountKobo / 100 : 19500,
+          value: amountKobo ? amountKobo / 100 : 15400,
           currency: "NGN",
         },
       },
